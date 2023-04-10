@@ -1,3 +1,7 @@
+# IDEA
+.idea
+.idea/*
+
 # Prerequisites
 *.d
 
@@ -30,3 +34,7 @@
 *.exe
 *.out
 *.app
+
+# Output
+out
+out/*
