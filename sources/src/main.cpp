@@ -1,50 +1,42 @@
 #include <iostream>
-#include <cstring>
+#include <thread>
 
 #include "../header/Socket.hpp"
+#include "../header/Client.hpp"
+
+void PrintLogo();
 
 int main()
 {
-    const char* serverIp = "127.0.0.1";
-    int port = 42024;
+	Client client;
+	if(!client.Initialize())
+	{
+		std::cerr << "Error starting the client" << std::endl;
+		return 1;
+	}
 
-    Socket* socket = new Socket();
-    if(!socket->Connect(serverIp, port))
-    {
-        std::cerr << "Couln't connect to the server." << std::endl;
-        return 1;
-    }
+	PrintLogo();
+	std::cout << "Welcome to CChat!" << std::endl;
 
-    int bufferSize = 4096;
-    char buffer[bufferSize];
-    std::string userInput;
-
-    do {
-        std::cout << "> ";
-        getline(std::cin, userInput);
-
-
-        int sendRes = socket->Send(userInput.c_str(), userInput.size() + 1);
-        if (sendRes == -1)
-        {
-            std::cout << "Could not send to server! Whoops!\n";
-            continue;
-        }
-
-        memset(buffer, 0, bufferSize);
-        int bytesReceived = socket->Receive(buffer, bufferSize);
-        if (bytesReceived == -1)
-        {
-            std::cout << "There was an error getting response from server\n";
-        }
-        else
-        {
-            std::cout << "SERVER> " << std::string(buffer, bytesReceived) << "\n";
-        }
-    } while(true);
-
-    socket->Close();
-    delete socket;
+	std::string userInput;
+	while(client.m_running)
+	{
+		std::getline(std::cin, userInput);
+		client.HandleInput(&userInput);
+	}
 
     return 0;
+}
+
+
+void PrintLogo()
+{
+	std::cout << "\t                              \t" << std::endl;
+	std::cout << "\t   ______________          __ \t" << std::endl;
+	std::cout << "\t  / ____/ ____/ /_  ____ _/ /_\t" << std::endl;
+	std::cout << "\t / /   / /   / __ \\/ __ `/ __/\t" << std::endl;
+	std::cout << "\t/ /___/ /___/ / / / /_/ / /_  \t" << std::endl;
+	std::cout << "\t\\____/\\____/_/ /_/\\__,_/\\__/  \t" << std::endl;
+	std::cout << "\t                              \t" << std::endl;
+	std::cout << "\t                              \t" << std::endl;
 }
