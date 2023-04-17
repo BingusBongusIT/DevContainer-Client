@@ -226,6 +226,16 @@ void Client::ReceiveMessages()
 		{
 			std::cout << "There was an error getting a response from the server" << std::endl;
 		}
+		else if (bytesReceived == 0)
+		{
+			m_socket->Close();
+			delete m_socket;
+			m_socket = new Socket();
+
+			m_connectedToServer = false;
+			std::cout << "Server disconnected" << std::endl;
+			break;
+		}
 		else
 		{
 			std::cout << "> " << std::string(m_buffer, bytesReceived) << std::endl;
