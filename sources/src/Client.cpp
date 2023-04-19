@@ -65,6 +65,15 @@ void Client::HandleInput(std::string* input)
 					}
 					break;
 				case 3: // /quit
+					if(m_connectedToServer)
+					{
+						m_socket->Close();
+						delete m_socket;
+						m_socket = new Socket();
+
+						m_connectedToServer = false;
+						m_serverListener.detach();
+					}
 					std::cout << "Quiting CChat" << std::endl;
 					Delete();
 					break;
@@ -212,7 +221,7 @@ void Client::Register()
 
 void Client::StartChat(std::string client)
 {
-	std::string messageClientString = "command: msg| " + client;
+	std::string messageClientString = "command: msg|" + client;
 	m_socket->Send(messageClientString.c_str(), messageClientString.size() + 1);
 }
 
@@ -228,11 +237,13 @@ void Client::ReceiveMessages()
 		}
 		else if (bytesReceived == 0)
 		{
+
 			m_socket->Close();
 			delete m_socket;
 			m_socket = new Socket();
 
 			m_connectedToServer = false;
+			m_serverListener.detach();
 			std::cout << "Server disconnected" << std::endl;
 			break;
 		}
