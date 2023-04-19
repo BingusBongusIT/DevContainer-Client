@@ -1,9 +1,20 @@
-# CChat-Server
+# CChat-Client
 
 C++ Client für eine kleine Chat-Applikation, welche für das Modul 347 über Docker erstellt wurde.
 
 ## Starten
 
+Um den CChat-Client zu starten, kann dieser aus dem neuesten Release heruntergeladen werden und als executable ausgeführt werden.
+```bash
+wget https://github.com/BingusBongusIT/DevContainer-Client/releases/download/{{neuester releases}}/CC-Client
+chmod 750 CC-Client
+sudo mv CC-Client /usr/local/bin
+```
+
+### Voraussetzungen
+
+Der CC-Client ist eine Unix Applikation und läuft deshalb nur auf diesen Systemen.  
+Des Weiteren wird die Version 2.34 von GLIBC benötigt.
 
 ## Entwickeln
 
